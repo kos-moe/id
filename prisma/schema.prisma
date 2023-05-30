@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                 String              @id
+  name               String              @default("")
+  authenticator      Json                @default("{}") @db.Json
+  accountIdentifiers AccountIdentifier[]
+  sessions           Session[]
+  verifyTokens       VerifyToken[]
+  OAuthToken         OAuthToken[]
+}
+
+model AccountIdentifier {
+  type       String
+  identifier String
+  data       Json    @default("{}") @db.Json
+  account    Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId  String
+
+  @@id([type, identifier])
+}
+
+model VerifyToken {
+  identifier String   @id
+  token      String
+  data       Json     @default("{}") @db.Json
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  Account    Account? @relation(fields: [accountId], references: [id])
+  accountId  String?
+}
+
+model Session {
+  id        String   @id
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
+  expiresAt DateTime
+  data      Json     @default("{}") @db.Json
+  app      OAuthApp? @relation(fields: [appId], references: [id], onDelete: Cascade)
+  appId    String?
+}
+
+model OAuthApp {
+  id           String                @id
+  name         String
+  clientId     String
+  clientSecret String
+  redirectURIs OAuthAppRedirectURI[]
+  tokens       OAuthToken[]
+  sessions     Session[]
+}
+
+model OAuthAppRedirectURI {
+  uri   String
+  app   OAuthApp @relation(fields: [appId], references: [id], onDelete: Cascade)
+  appId String
+
+  @@id([uri, appId])
+}
+
+model OAuthToken {
+  id        String    @id
+  App       OAuthApp? @relation(fields: [appId], references: [id], onDelete: Cascade)
+  appId     String?
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
+}

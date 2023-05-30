@@ -8,9 +8,9 @@ COPY package.json pnpm-lock.yaml ./
 RUN corepack enable
 RUN corepack prepare pnpm@latest --activate
 RUN pnpm install
-RUN pnpm run generate
 
 COPY . .
+RUN pnpm run generate
 
 EXPOSE 80
 

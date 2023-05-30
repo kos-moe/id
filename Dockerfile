@@ -1,7 +1,5 @@
 FROM node:18-alpine
 
-ENV PORT 80
-
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
@@ -10,8 +8,9 @@ RUN corepack prepare pnpm@latest --activate
 RUN pnpm install
 
 COPY . .
-RUN pnpm run generate
+RUN pnpm run prisma:generate
+RUN pnpm run build
 
-EXPOSE 80
+EXPOSE 8000
 
 CMD ["pnpm", "start"]

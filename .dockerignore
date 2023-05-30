@@ -3,3 +3,5 @@ node_modules
 apiKey.json
 .DS_Store
 .env
+dist/
+docker-compose.yml

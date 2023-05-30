@@ -14,4 +14,4 @@ COPY . .
 
 EXPOSE 80
 
-CMD ["node", "/app/entry-http.js"]
+CMD ["pnpm", "start"]

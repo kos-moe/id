@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import React, { FormEvent, useContext } from 'react';
+import React, { FormEvent, memo, useContext } from 'react';
 import { SessionContext } from '../session-context';
 import { Card, Form, Button } from 'react-bootstrap';
 export default function LoginPage() {
@@ -57,7 +57,7 @@ export default function LoginPage() {
       <Card.Body>
         <Form.Group>
           <Form.Label>이메일</Form.Label>
-          <Form.Control type="email" name="email" required autoComplete="email webauthn"/>
+          <Form.Control type="email" name="email" required autoComplete="email webauthn" defaultValue={email}/>
           <Form.Text className="text-muted">가입하지 않으셨다면 회원가입 링크를 보내드릴게요.</Form.Text>
         </Form.Group>
       </Card.Body>
@@ -124,14 +124,14 @@ export default function LoginPage() {
     </>
   }
 
-  function Panel() {
+  const Panel = memo(function() {
     switch(phase) {
       case 'login':
-        return <LoginByPasswordPanel/>
+        return <LoginByPasswordPanel/>;
       default:
         return <InitialPanel/>;
     }
-  }
+  });
 
   return <>
     <Card>

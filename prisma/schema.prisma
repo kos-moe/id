@@ -50,8 +50,7 @@ model Session {
 model OAuthApp {
   id           String                @id
   name         String
-  clientId     String
-  clientSecret String
+  secret String
   redirectURIs OAuthAppRedirectURI[]
   tokens       OAuthToken[]
   sessions     Session[]
@@ -67,7 +66,7 @@ model OAuthAppRedirectURI {
 
 model OAuthToken {
   id        String    @id
-  App       OAuthApp? @relation(fields: [appId], references: [id], onDelete: Cascade)
+  app       OAuthApp? @relation(fields: [appId], references: [id], onDelete: Cascade)
   appId     String?
   account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String

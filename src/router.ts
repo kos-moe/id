@@ -15,7 +15,9 @@ export function createRouter() {
 }
 
 export async function parseBody(ctx: Context, next: Next) {
-  ctx.set('body', await ctx.req.parseBody() || await ctx.req.json());
+  let body = await ctx.req.parseBody();
+  if(Object.keys(body).length === 0) body = await ctx.req.json();
+  ctx.set('body', body);
   return next();
 }
 

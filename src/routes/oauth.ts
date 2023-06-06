@@ -32,7 +32,7 @@ app.post('/token', parseBody, async(ctx) => {
   });
   if (!oAuthToken || !(oAuthToken.app.id === clientId && await verify(oAuthToken.app.secret, clientSecret))) throw new HTTPException(401);
   const session = await makeSession(oAuthToken.accountId, oAuthToken.app.id);
-  db.oAuthToken.delete({
+  await db.oAuthToken.delete({
     where: {
       id: oAuthToken.id
     }
